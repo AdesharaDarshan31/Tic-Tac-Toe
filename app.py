@@ -5,7 +5,6 @@ import pygame
 import random
 from ai import best_move, check_winner, is_full
 
-# ---------------- SOUND ---------------- #
 def play_sound(file_path):
     try:
         if not pygame.mixer.get_init():
@@ -31,7 +30,6 @@ try:
 except:
     pass
 
-# ---------------- PAGE CONFIG ---------------- #
 st.set_page_config(page_title="Tic Tac Toe", page_icon="🎮", layout="wide")
 
 x_img = Image.open("assets/x.png")
@@ -42,7 +40,6 @@ SND_WIN = "assets/win.wav"
 SND_DRAW = "assets/draw.wav"
 SND_LOSE = "assets/lose.wav"
 
-# ---------------- CSS ---------------- #
 st.markdown("""
 <style>
 
@@ -100,7 +97,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- STATE ---------------- #
 def new_board():
     return [[" " for _ in range(3)] for _ in range(3)]
 
@@ -138,7 +134,6 @@ def reset(full=False):
         st.session_state.mode = None
         st.session_state.difficulty = "Medium"
 
-# ---------------- AI LOGIC ---------------- #
 def get_ai_move(board):
     empty = [(i, j) for i in range(3) for j in range(3) if board[i][j] == " "]
     if not empty:
@@ -178,7 +173,6 @@ def ai_turn():
 
     st.session_state.current_player = "X"
 
-# ---------------- MOVE HANDLER ---------------- #
 def move(i, j):
     if st.session_state.game_over:
         return
@@ -215,10 +209,8 @@ def move(i, j):
         st.session_state.current_player = "O"
         ai_turn()
 
-# ---------------- TITLE ---------------- #
 st.markdown("<div class='app-title'>Tic Tac Toe 🎮</div>", unsafe_allow_html=True)
 
-# ---------------- MODE SELECT ---------------- #
 if st.session_state.mode is None:
 
     st.markdown("<div class='menu-title'>Choose Game Mode</div>", unsafe_allow_html=True)
@@ -236,7 +228,6 @@ if st.session_state.mode is None:
             st.session_state.mode="2P_SETUP"
             st.rerun()
 
-# ---------------- AI DIFFICULTY ---------------- #
 elif st.session_state.mode == "AI_SETUP":
 
     st.markdown("<div class='menu-title'>😊 Choose Difficulty</div>", unsafe_allow_html=True)
@@ -306,7 +297,6 @@ elif st.session_state.mode == "AI_SETUP":
             reset(full=True)
             st.rerun()
 
-# ---------------- 2P SETUP ---------------- #
 elif st.session_state.mode == "2P_SETUP":
 
     st.markdown("<div class='menu-title'>👥 Enter Player Names</div>", unsafe_allow_html=True)
@@ -329,7 +319,6 @@ elif st.session_state.mode == "2P_SETUP":
             reset(full=True)
             st.rerun()
 
-# ---------------- GAME ---------------- #
 else:
 
     game,score = st.columns([4,1])
