@@ -1,6 +1,33 @@
 import streamlit as st
 from PIL import Image
+import base64
 import pygame
+import os
+
+def play_sound(file_path):
+    """Play sound locally with pygame; fallback to browser audio online."""
+    try:
+        # Detect Streamlit Cloud or limited environment
+        if "streamlit" in os.getenv("HOME", "").lower() or not pygame.mixer.get_init():
+            with open(file_path, "rb") as f:
+                data = f.read()
+            b64 = base64.b64encode(data).decode()
+            sound_html = f"""
+            <script>
+            setTimeout(() => {{
+                var audio = new Audio("data:audio/wav;base64,{b64}");
+                audio.volume = 0.8;
+                audio.play();
+            }}, 150);
+            </script>
+            """
+            st.markdown(sound_html, unsafe_allow_html=True)
+        else:
+            pygame.mixer.Sound(file_path).play()
+    except Exception as e:
+        print("⚠️ Could not play sound:", e)
+
+
 from ai import best_move, check_winner, is_full
 
 pygame.mixer.init()
@@ -141,19 +168,19 @@ def find_winning_cells(b, sym):
 def move(i,j):
     if st.session_state.game_over or st.session_state.board[i][j]!=" ": return
     st.session_state.board[i][j]=st.session_state.current_player
-    pygame.mixer.Sound(SND_CLICK).play()
+    play_sound(SND_CLICK)
     winner=check_winner(st.session_state.board)
     if winner:
         st.session_state.winner=winner; st.session_state.game_over=True
         st.session_state.winning_cells=find_winning_cells(st.session_state.board,winner)
         st.session_state.matches+=1
-        if winner=="X": st.session_state.score_x+=1; pygame.mixer.Sound(SND_WIN).play()
-        else: st.session_state.score_o+=1; pygame.mixer.Sound(SND_LOSE).play()
+        if winner=="X": st.session_state.score_x+=1; play_sound(SND_WIN)
+        else: st.session_state.score_o+=1; play_sound(SND_LOSE)
         return
     if is_full(st.session_state.board):
         st.session_state.game_over=True; st.session_state.winner=None
         st.session_state.matches+=1; st.session_state.draws+=1
-        pygame.mixer.Sound(SND_DRAW).play(); return
+        play_sound(SND_DRAW); return
     if st.session_state.mode=="2P":
         st.session_state.current_player="O" if st.session_state.current_player=="X" else "X"
     else:
@@ -167,10 +194,10 @@ def ai_turn():
         if winner:
             st.session_state.winner=winner; st.session_state.game_over=True
             st.session_state.winning_cells=find_winning_cells(st.session_state.board,winner)
-            st.session_state.matches+=1; st.session_state.score_o+=1; pygame.mixer.Sound(SND_LOSE).play()
+            st.session_state.matches+=1; st.session_state.score_o+=1; play_sound(SND_LOSE)
         elif is_full(st.session_state.board):
             st.session_state.game_over=True; st.session_state.winner=None
-            st.session_state.matches+=1; st.session_state.draws+=1; pygame.mixer.Sound(SND_DRAW).play()
+            st.session_state.matches+=1; st.session_state.draws+=1; play_sound(SND_DRAW)
         else: st.session_state.current_player="X"
 
 st.markdown("""
