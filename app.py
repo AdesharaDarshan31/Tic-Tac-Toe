@@ -122,6 +122,46 @@ st.markdown("""
 .score-title{font-size:22px;font-weight:800;color:#00d2ff;text-shadow:0 0 10px #00d2ff;margin-bottom:10px;}
 .score-line{display:flex;justify-content:space-between;color:#fff;font-size:17px;margin:6px 0;}
 .score-hr{height:1px;background:#00d2ff;margin:10px 0;}
+
+/* ======================================
+   Responsive Fixes for Mobile View
+====================================== */
+@media (max-width: 768px) {
+  .stApp {
+    font-size: 90%;
+  }
+
+  /* Reduce padding and gaps for mobile */
+  .stButton>button {
+    height: 60px !important;
+    width: 160px !important;
+    font-size: 16px !important;
+  }
+
+  /* Make tiles smaller for mobile */
+  .tile {
+    height: 90px !important;
+  }
+
+  /* Adjust layout spacing */
+  .block-container {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* Make scorecard appear below the game board */
+  [data-testid="column"] {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Center all content for mobile */
+  .col-score, .score-card, .app-title, .turn-text, .win-text {
+    text-align: center !important;
+    margin: auto !important;
+  }
+}            
+            
 </style>
 
 <div class="particle-container">
