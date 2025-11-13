@@ -7,7 +7,6 @@ import os
 def play_sound(file_path):
     """Play sound locally with pygame; fallback to browser audio online."""
     try:
-        # Detect Streamlit Cloud or limited environment
         if "streamlit" in os.getenv("HOME", "").lower() or not pygame.mixer.get_init():
             with open(file_path, "rb") as f:
                 data = f.read()
@@ -25,7 +24,7 @@ def play_sound(file_path):
         else:
             pygame.mixer.Sound(file_path).play()
     except Exception as e:
-        print("⚠️ Could not play sound:", e)
+        print("Could not play sound:", e)
 
 
 from ai import best_move, check_winner, is_full
@@ -123,39 +122,31 @@ st.markdown("""
 .score-line{display:flex;justify-content:space-between;color:#fff;font-size:17px;margin:6px 0;}
 .score-hr{height:1px;background:#00d2ff;margin:10px 0;}
 
-/* ======================================
-   Responsive Fixes for Mobile View
-====================================== */
 @media (max-width: 768px) {
   .stApp {
     font-size: 90%;
   }
 
-  /* Reduce padding and gaps for mobile */
-  .stButton>button {
+              .stButton>button {
     height: 60px !important;
     width: 160px !important;
     font-size: 16px !important;
   }
 
-  /* Make tiles smaller for mobile */
   .tile {
     height: 90px !important;
   }
 
-  /* Adjust layout spacing */
   .block-container {
     padding-top: 1rem !important;
     padding-bottom: 1rem !important;
   }
 
-  /* Make scorecard appear below the game board */
   [data-testid="column"] {
     display: block !important;
     width: 100% !important;
   }
 
-  /* Center all content for mobile */
   .col-score, .score-card, .app-title, .turn-text, .win-text {
     text-align: center !important;
     margin: auto !important;
