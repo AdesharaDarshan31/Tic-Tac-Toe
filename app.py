@@ -30,7 +30,10 @@ def play_sound(file_path):
 
 from ai import best_move, check_winner, is_full
 
-pygame.mixer.init()
+try:
+    pygame.mixer.init()
+except Exception as e:
+    print("⚠️ Pygame mixer not available, using browser sound only.")
 
 st.set_page_config(page_title="Tic Tac Toe", page_icon="🎮", layout="wide")
 
