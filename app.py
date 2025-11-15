@@ -5,7 +5,6 @@ import pygame
 import random
 from ai import best_move, check_winner, is_full
 
-# ---------------- SOUND ---------------- #
 def play_sound(file_path):
     try:
         if not pygame.mixer.get_init():
@@ -31,7 +30,6 @@ try:
 except:
     pass
 
-# ---------------- PAGE CONFIG ---------------- #
 st.set_page_config(page_title="Tic Tac Toe", page_icon="🎮", layout="wide")
 
 x_img = Image.open("assets/x.png")
@@ -42,7 +40,6 @@ SND_WIN = "assets/win.wav"
 SND_DRAW = "assets/draw.wav"
 SND_LOSE = "assets/lose.wav"
 
-# ---------------- CSS ---------------- #
 st.markdown("""
 <style>
 
@@ -59,6 +56,7 @@ st.markdown("""
   100%{background-position:0% 50%}
 }
 
+/* ---------- TITLES ---------- */
 .app-title{
   display:flex;align-items:center;justify-content:center;gap:12px;
   margin-top:40px;margin-bottom:20px;
@@ -73,12 +71,18 @@ st.markdown("""
   text-shadow:0 0 20px #00d2ff;margin-bottom:20px;
 }
 
+/* ---------- BUTTONS ---------- */
 .stButton>button{
-  height:80px;width:220px;font-size:22px;font-weight:600;border-radius:12px;
-  margin:10px;background:linear-gradient(135deg,#232526,#414345);
-  color:#e8faff;border:2px solid #00d2ff;transition:.3s;
+  height:80px;width:220px;
+  font-size:22px;font-weight:600;
+  border-radius:12px; margin:10px auto !important;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#232526,#414345);
+  color:#e8faff;border:2px solid #00d2ff;
+  transition:.3s;
   box-shadow:0 0 10px rgba(0,210,255,0.3);
 }
+
 .stButton>button:hover{
   background:linear-gradient(135deg,#00c6ff,#0072ff);
   transform:scale(1.07);
@@ -86,21 +90,131 @@ st.markdown("""
   color:#fff;
 }
 
-.turn-text{text-align:center;color:#00d2ff;font-size:24px;font-weight:700;margin:10px 0;}
-.win-text{text-align:center;color:#FFD54A;font-size:28px;font-weight:900;text-shadow:0 0 25px #FFD54A;margin:10px 0;}
-
-.score-card{
-  background:rgba(255,255,255,0.06);border-radius:12px;padding:25px;width:250px;
-  text-align:center;box-shadow:0 0 10px rgba(0,255,255,0.1);backdrop-filter:blur(10px);
+/* ---------- GAME TEXT ---------- */
+.turn-text{
+  text-align:center;color:#00d2ff;font-size:24px;
+  font-weight:700;margin:10px 0;
 }
-.score-title{font-size:22px;font-weight:800;color:#00d2ff;text-shadow:0 0 10px #00d2ff;}
-.score-line{display:flex;justify-content:space-between;color:#fff;font-size:17px;margin:6px 0;}
-.score-hr{height:1px;background:#00d2ff;margin:10px 0;}
+
+.win-text{
+  text-align:center;color:#FFD54A;font-size:28px;
+  font-weight:900;text-shadow:0 0 25px #FFD54A;margin:10px 0;
+}
+
+/* ---------- SCORE CARD ---------- */
+.score-card{
+  background:rgba(255,255,255,0.06);
+  border-radius:12px;
+  padding:25px;
+  width:250px;
+  text-align:center;
+  box-shadow:0 0 10px rgba(0,255,255,0.1);
+  backdrop-filter:blur(10px);
+}
+
+.score-title{
+  font-size:22px;font-weight:800;color:#00d2ff;
+  text-shadow:0 0 10px #00d2ff;
+}
+
+.score-line{
+  display:flex;justify-content:space-between;
+  color:#fff;font-size:17px;margin:6px 0;
+}
+
+.score-hr{
+  height:1px;background:#00d2ff;margin:10px 0;
+}
+
+/* ---------------------------------------------------
+                RESPONSIVE FIXES
+-----------------------------------------------------*/
+
+/**** TABLET (<= 900px) ****/
+@media (max-width:900px){
+  .app-title{font-size:42px;}
+  .menu-title{font-size:32px;}
+
+  .stButton>button{
+    width:200px !important;
+    height:70px !important;
+    font-size:20px !important;
+  }
+
+  img{
+    width:70px !important;
+  }
+}
+
+/**** MOBILE (<= 600px) ****/
+@media (max-width:600px){
+
+  .app-title{
+    font-size:34px !important;
+    margin-top:25px !important;
+  }
+
+  .menu-title{
+    font-size:26px !important;
+  }
+
+  .turn-text{
+    font-size:20px !important;
+  }
+
+  .win-text{
+    font-size:22px !important;
+  }
+
+  .stButton>button{
+    width:160px !important;
+    height:60px !important;
+    font-size:17px !important;
+    margin:8px auto !important;
+  }
+
+  img{
+    width:55px !important;
+  }
+
+  /* tighter columns so grid fits */
+  [data-testid="column"]{
+    padding-left:3px !important;
+    padding-right:3px !important;
+  }
+
+  /* scoreboard below game */
+  .score-card{
+    width:100% !important;
+    margin-top:20px !important;
+  }
+}
+
+/**** SMALL MOBILE (<= 400px) ****/
+@media (max-width:400px){
+
+  .app-title{font-size:28px !important;}
+  .menu-title{font-size:22px !important;}
+
+  .stButton>button{
+    width:140px !important;
+    height:55px !important;
+    font-size:15px !important;
+  }
+
+  img{
+    width:45px !important;
+  }
+
+  .turn-text, .win-text{
+    font-size:18px !important;
+  }
+}
 
 </style>
+            
 """, unsafe_allow_html=True)
 
-# ---------------- STATE ---------------- #
 def new_board():
     return [[" " for _ in range(3)] for _ in range(3)]
 
@@ -138,7 +252,6 @@ def reset(full=False):
         st.session_state.mode = None
         st.session_state.difficulty = "Medium"
 
-# ---------------- AI LOGIC ---------------- #
 def get_ai_move(board):
     empty = [(i, j) for i in range(3) for j in range(3) if board[i][j] == " "]
     if not empty:
@@ -178,7 +291,6 @@ def ai_turn():
 
     st.session_state.current_player = "X"
 
-# ---------------- MOVE HANDLER ---------------- #
 def move(i, j):
     if st.session_state.game_over:
         return
@@ -215,10 +327,8 @@ def move(i, j):
         st.session_state.current_player = "O"
         ai_turn()
 
-# ---------------- TITLE ---------------- #
 st.markdown("<div class='app-title'>Tic Tac Toe 🎮</div>", unsafe_allow_html=True)
 
-# ---------------- MODE SELECT ---------------- #
 if st.session_state.mode is None:
 
     st.markdown("<div class='menu-title'>Choose Game Mode</div>", unsafe_allow_html=True)
@@ -236,77 +346,77 @@ if st.session_state.mode is None:
             st.session_state.mode="2P_SETUP"
             st.rerun()
 
-# ---------------- AI DIFFICULTY ---------------- #
 elif st.session_state.mode == "AI_SETUP":
 
     st.markdown("<div class='menu-title'>😊 Choose Difficulty</div>", unsafe_allow_html=True)
 
-    # JS WRITES difficulty HERE
-    if st.session_state.difficulty_js:
-        st.session_state.difficulty = st.session_state.difficulty_js
-        st.session_state.difficulty_js = ""
-        st.rerun()
+    diffs = ["Easy", "Medium", "Hard"]
+    selected = st.session_state.difficulty
 
-    diffs = ["Easy","Medium","Hard"]
+    # --- PERFECT CENTER ALIGNMENT ---
+    col_left, col_mid, col_right = st.columns([1, 2, 1])
+    with col_mid:
 
-    html = "<div style='display:flex;justify-content:center;gap:40px;margin-top:20px;margin-bottom:45px;'>"
+        # Layout: 3 equal columns for Easy / Medium / Hard
+        diff_cols = st.columns(3)
 
+        for i, diff in enumerate(diffs):
+            with diff_cols[i]:
+
+                # WRAPPER BOX (we highlight THIS, not the st button)
+                wrapper_id = f"wrap-{diff}"
+
+                st.markdown(
+                    f"""
+                    <div id="{wrapper_id}" style="
+                        padding: 4px;
+                        border-radius: 15px;
+                        transition: 0.25s ease;
+                        display: flex;
+                        justify-content: center;
+                    ">
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                # THE STREAMLIT BUTTON (unstyled)
+                if st.button(diff, key=f"btn-{diff}"):
+                    st.session_state.difficulty = diff
+                    st.rerun()
+
+                st.markdown("</div>", unsafe_allow_html=True)
+
+    # --- APPLY HIGHLIGHT TO ACTIVE WRAPPER ---
+    highlight_css = "<style>"
     for diff in diffs:
-        active = (st.session_state.difficulty == diff)
+        wrapper_id = f"wrap-{diff}"
+        if diff == selected:
+            highlight_css += f"""
+            #{wrapper_id} {{
+                background: linear-gradient(135deg, #00c6ff55, #0072ff55);
+                box-shadow: 0 0 25px rgba(0,210,255,0.7);
+                transform: scale(1.15);
+            }}
+            """
+    highlight_css += "</style>"
 
-        html += f"""
-        <button 
-            onclick="document.getElementById('diff_input').value='{diff}';
-                     document.getElementById('diff_form').submit();"
-            style="
-                width:220px;
-                height:80px;
-                font-size:22px;
-                font-weight:700;
-                border-radius:12px;
-                border:2px solid #00d2ff;
-                cursor:pointer;
-                transition:.3s;
-                background:linear-gradient(135deg,#232526,#414345);
-                color:#e8faff;
-                box-shadow:0 0 12px rgba(0,210,255,0.4);
-                {
-                    'background:linear-gradient(135deg,#00c6ff,#0072ff);color:white;box-shadow:0 0 35px rgba(0,210,255,1);'
-                    if active else ''
-                }
-            "
-        >{diff}</button>
-        """
+    st.markdown(highlight_css, unsafe_allow_html=True)
 
-    html += "</div>"
+    # --- PERFECT CENTER ALIGNMENT FOR Start/Back ---
+    s1, s2, s3 = st.columns([1, 2, 1])
+    with s2:
+        cA, cB = st.columns(2)
 
-    st.components.v1.html(html, height=200)
-
-    # hidden auto-submitting form
-    st.components.v1.html("""
-        <form id="diff_form" method="post">
-            <input type="hidden" id="diff_input" name="difficulty_js">
-        </form>
-    """, height=0)
-
-    # Streamlit sees POST data here
-    if "difficulty_js" in st.session_state:
-        pass
-
-    # START / BACK
-    c1,c2,c3 = st.columns([1,2,1])
-    with c2:
-        a,b = st.columns(2)
-        if a.button("Start Game"):
-            st.session_state.mode="AI"
+        if cA.button("Start Game"):
+            st.session_state.mode = "AI"
             reset(full=False)
             st.rerun()
 
-        if b.button("Back"):
+        if cB.button("Back"):
             reset(full=True)
             st.rerun()
 
-# ---------------- 2P SETUP ---------------- #
+
 elif st.session_state.mode == "2P_SETUP":
 
     st.markdown("<div class='menu-title'>👥 Enter Player Names</div>", unsafe_allow_html=True)
@@ -329,7 +439,6 @@ elif st.session_state.mode == "2P_SETUP":
             reset(full=True)
             st.rerun()
 
-# ---------------- GAME ---------------- #
 else:
 
     game,score = st.columns([4,1])
