@@ -416,7 +416,6 @@ elif st.session_state.mode == "AI_SETUP":
             reset(full=True)
             st.rerun()
 
-
 elif st.session_state.mode == "2P_SETUP":
 
     st.markdown("<div class='menu-title'>👥 Enter Player Names</div>", unsafe_allow_html=True)
